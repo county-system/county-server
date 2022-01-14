@@ -1,0 +1,25 @@
+{
+  "name": "Wikonnect",
+  "version": "0.4.0",
+  "description": "Wikonnect community docs",
+  "title": "Wikonnect community docs",
+  "url": "https://app.wikonnect.org",
+  "sampleUrl": "https://app.wikonnect.org",
+  "order": [
+    "Authentication",
+    "Chapters",
+    "Reactions",
+    "PostAReaction",
+    "GetAReAction",
+    "GetReactions",
+    "DeleteARection"
+  ],
+  "header": {
+    "title": "Getting Started",
+    "filename": "README.md"
+  },
+  "footer": {
+    "title": "Contributing Guidelines",
+    "filename": "../CONTRIBUTING.md"
+  }
+}

@@ -1,0 +1,5 @@
+# unconventional js
+/public/
+node_modules
+/doc/
+swagger

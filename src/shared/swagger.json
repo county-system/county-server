@@ -1,0 +1,55 @@
+{
+    "basePath": "/",
+    "components": {
+        "securitySchemes": {
+            "ApiKeyAuth": {
+                "in": "header",
+                "name": "BACKEND-API-KEY",
+                "scheme": "bearer",
+                "type": "http"
+            }
+        }
+    },
+    "info": {
+        "description": "Web and Mobile API",
+        "title": "Web and Mobile API",
+        "version": "0.2.5"
+    },
+    "openapi": "3.0.0",
+    "paths": {
+        "/api/v2/auth/token": {
+            "post": {
+                "tags": [
+                    "Clients"
+                ],
+                "description": "Get Lami API Token",
+                "produces": [
+                    "application/json"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "client_id": {
+                                        "type": "string"
+                                    },
+                                    "client_secret": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Information fetched succussfuly"
+                    }
+                }
+            }
+        }
+    },
+    "tags": []
+}
