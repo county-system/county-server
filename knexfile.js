@@ -1,7 +1,7 @@
 require('dotenv').config();
 // Update with your config settings.
 const path = require('path');
-const log = require('@utils/logger');
+const log = require('./src/utils/logger');
 const BASE_PATH = path.join(__dirname, 'db');
 
 let connections;

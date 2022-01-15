@@ -2,8 +2,8 @@ const Koa = require('koa');
 const path = require('path');
 const koaQs = require('koa-qs');
 const bodyParser = require('koa-bodyparser');
-const errorHandler = require('@middleware/error');
-const logger = require('@middleware/logger');
+const errorHandler = require('./src/middleware/error');
+const logger = require('./src/middleware/logger');
 const cors = require('@koa/cors');
 
 const { koaSwagger } = require('koa2-swagger-ui');
