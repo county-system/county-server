@@ -1,12 +1,14 @@
 const parseDatabaseUrl = require('../utils/parseDatabaseUrl');
 const { NODE_ENV: env, DATABASE_URL } = process.env || '';
 
+const dotenv = require('dotenv');
+dotenv.config();
+
 let data = {};
 
 if (env === 'production') {
   const config = parseDatabaseUrl(DATABASE_URL);
-  data[`${env}`] = config ;
-  console.log(data);
+  data[`${env}`] = config;
 }
 
 module.exports = {
