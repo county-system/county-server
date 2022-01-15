@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon --ignore node_modules/ --ignore public/ --ignore h5p-dummy/",
+    "dev": "nodemon --ignore node_modules/ --ignore public/",
     "db:init": "knex migrate:latest",
     "db:reset": "knex migrate:rollback && knex migrate:latest",
     "db:seed": "knex seed:run",
