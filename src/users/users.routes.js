@@ -8,9 +8,9 @@ const { createPasswordHash } = require('../utils/routesUtils/userRouteUtils');
 
 const users = new Router();
 
+users.get('/', controller.getUsers);
+users.get('/:id', permController.requireAuth, permController.grantAccess('readAny', 'private'), controller.getUserById);
 users.post('/', validateAuthRoutes.validateNewUser, createPasswordHash, controller.getUsers);
-users.get('/:id', controller.getUserById);
-users.get('/', permController.requireAuth, permController.grantAccess('readAny', 'private'), controller.getUsers);
 users.put('/:id', jwt.authenticate, permController.requireAuth, controller.updateUserById);
 users.post('/invite/:id', jwt.authenticate, permController.requireAuth, controller.storeInviteId);
 users.post('/:id/profile-image', koaBody, permController.requireAuth, controller.uploadProfileImage);
