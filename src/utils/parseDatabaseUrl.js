@@ -11,7 +11,8 @@ const url = require('url');
 function parseDatabaseUrl(databaseUrl) {
   const parsedUrl = url.parse(databaseUrl, false, true);
   let config = {};
-  config.database = parsedUrl.protocol.slice(0, -1);
+  config.driver = parsedUrl.protocol.slice(0, -1);
+  config.database = parsedUrl.pathname.slice(1);
   config.host = parsedUrl.hostname;
   config.port = parsedUrl.port;
   config.user = parsedUrl.auth.split(':')[0];
