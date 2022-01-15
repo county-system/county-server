@@ -1,4 +1,4 @@
-require("dotenv").config();
+require('dotenv').config();
 
 let environment = process.env.NODE_ENV;
 if (!process.env.NODE_ENV) {

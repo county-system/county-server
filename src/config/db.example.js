@@ -5,7 +5,8 @@ let data = {};
 
 if (env === 'production') {
   const config = parseDatabaseUrl(DATABASE_URL);
-  data[`${env}`] = { ...config };
+  data[`${env}`] = config ;
+  console.log(data);
 }
 
 module.exports = {
@@ -28,5 +29,5 @@ module.exports = {
     password: 'password',
     port: '5432'
   },
-  data
+  ...data
 };
