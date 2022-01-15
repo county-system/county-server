@@ -15,7 +15,8 @@
     "test": "nyc mocha test --timeout 10000 --reporter mocha-junit-reporter --reporter-options mochaFile=coverage/mocha/test-results.xml --exit",
     "lint:js": "eslint .",
     "lint:fix": "eslint . --fix",
-    "swagger": "node ./src/config/swagger"
+    "swagger": "node ./src/config/swagger",
+    "postinstall": "npm run swagger && npm run db:init && npm run db:seed"
   },
   "dependencies": {
     "@elastic/elasticsearch": "^7.4.0",
