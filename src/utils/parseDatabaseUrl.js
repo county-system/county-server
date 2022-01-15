@@ -17,7 +17,6 @@ function parseDatabaseUrl(databaseUrl) {
   config.port = parsedUrl.port;
   config.user = parsedUrl.auth.split(':')[0];
   config.password = parsedUrl.auth.split(':')[1];
-  // return JSON.stringify(config);
   return config;
 }
 
