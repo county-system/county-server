@@ -17,7 +17,7 @@ const app = require('./server');
 /*
  * Get port from environment (default 3000)
  */
-const port = process.env.SERVER_PORT ? process.env.SERVER_PORT :
+const port = process.env.PORT ? process.env.PORT :
   process.argv.indexOf('--port') > -1 ? process.argv[process.argv.indexOf('--port') + 1] : 3000;
 
 // app.set('port', port);
