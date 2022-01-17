@@ -132,3 +132,4 @@ yarn-error.log
 .env
 data
 *.code-workspace
+test.json

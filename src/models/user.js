@@ -50,34 +50,6 @@ class User extends Model {
 
   static get relationMappings() {
     return {
-      enrolledCourses: {
-        relation: Model.ManyToManyRelation,
-        modelClass: __dirname + '/course',
-        join: {
-          from: 'users.id',
-          through: {
-            from: 'course_enrollment.userId',
-            to: 'course_enrollment.courseId'
-          },
-          to: 'courses.id'
-        }
-      },
-      achievementAwards: {
-        relation: Model.HasManyRelation,
-        modelClass: __dirname + '/achievement_awards',
-        join: {
-          from: 'users.id',
-          to: 'achievement_awards.userId'
-        }
-      },
-      oauth2: {
-        relation: Model.HasManyRelation,
-        modelClass: __dirname + '/oauth2',
-        join: {
-          from: 'users.id',
-          to: 'oauth2.userId'
-        }
-      },
       userRoles: {
         relation: Model.ManyToManyRelation,
         modelClass: __dirname + '/group',
@@ -90,87 +62,6 @@ class User extends Model {
           to: 'groups.id'
         }
       },
-      followees: {
-        relation: Model.ManyToManyRelation,
-        modelClass: __dirname + '/user',
-        join: {
-          from: 'users.id',
-          through: {
-            to: 'user_followers.followeeId',
-            from: 'user_followers.userId',
-            extra: {
-              subscriptionId: 'id'
-            },
-          },
-          to: 'users.id'
-        }
-      },
-      followers: {
-        relation: Model.ManyToManyRelation,
-        modelClass: __dirname + '/user',
-        join: {
-          from: 'users.id',
-          through: {
-            to: 'user_followers.userId',
-            from: 'user_followers.followeeId',
-            extra: {
-              subscriptionId: 'id'
-            },
-          },
-          to: 'users.id'
-        }
-      },
-
-      userFollowers: {
-        relation: Model.HasManyRelation,
-        modelClass: __dirname + '/user-follower',
-        join: {
-          from: 'users.id',
-          to: 'user_followers.followeeId' //perspective: my followers
-        }
-      },
-      userFollowees: {
-        relation: Model.HasManyRelation,
-        modelClass: __dirname + '/user-follower',
-        join: {
-          from: 'users.id',
-          to: 'user_followers.userId', //perspective: people I am following
-        }
-      },
-      tagsFollowing: {
-        relation: Model.HasManyRelation,
-        modelClass: __dirname + '/tag-follower',
-        join: {
-          from: 'users.id',
-          to: 'tag_followers.userId'
-        }
-      },
-      courseEnrollments: {
-        relation: Model.HasManyRelation,
-        modelClass: __dirname + '/course-enrollment',
-        join: {
-          from: 'users.id',
-          to: 'course_enrollment.userId'
-        }
-      },
-      chapters: {
-        relation: Model.HasManyRelation,
-        modelClass: __dirname + '/chapter',
-        join: {
-          from: 'users.id',
-          to: 'chapters.creatorId'
-        }
-      },
-      courses: {
-        relation: Model.HasManyRelation,
-        modelClass: __dirname + '/course',
-        join: {
-          from: 'users.id',
-          to: 'courses.creatorId'
-        }
-      },
-
-
     };
   }
 

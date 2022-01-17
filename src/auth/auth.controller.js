@@ -12,11 +12,11 @@ const DOMAIN_NAME = process.env.DOMAIN_NAME || 'http://localhost:4200';
 
 /**
 	* @swagger
-	* /api/v2/auth/token:
+	* /api/v2/auth/login:
 	*   post:
 	*     tags:
-	*       - Clients
-	*     description: Get Lami API Token
+	*       - Auth
+	*     description: Get Users API Token
 	*     produces:
 	*       - application/json
 	*     requestBody:
@@ -25,21 +25,20 @@ const DOMAIN_NAME = process.env.DOMAIN_NAME || 'http://localhost:4200';
 	*            schema:
 	*              type: object
 	*              properties:
-	*                client_id:
+	*                username:
 	*                 type: string
-	*                client_secret:
+	*                password:
 	*                 type: string
 	*     responses:
 	*       200:
-	*         description: Information fetched succussfuly
+	*         description: Information fetched successfully
 	*/
 
 async function login(ctx) {
   const username = ctx.request.body.username.toLowerCase();
 
-  let user = await User.query().where('username', username).withGraphFetched('oauth2(selectOauth2)');
+  let user = await User.query().where('username', username);
   if (!user.length) ctx.throw(404, null, { errors: [{ 'name': 'Wrong username or password', 'constraint': 'errors', }] });
-
 
   let { hash: hashPassword, ...userInfoWithoutPassword } = user[0];
   user = user[0];
@@ -49,25 +48,12 @@ async function login(ctx) {
   let role = userData['userRoles'][0] !== undefined ? userData['userRoles'][0].name : 'basic';
   userInfoWithoutPassword['role'] = role;
 
-  if (user.oauth2[0] != undefined && user.oauth2[0].userId == user.id) {
+  if (await bcrypt.compare(ctx.request.body.password, hashPassword)) {
     await user
       .$query()
       .findById(user.id)
       .patch({ lastSeen: new Date(+new Date()) });
 
-    ctx.body = {
-      token: jsonwebtoken.sign({
-        data: userInfoWithoutPassword,
-        exp: Math.floor(Date.now() / 1000 + 604800) // 60 seconds * 60 minutes * 24 hours * 7 days = 1 week
-      }, secret)
-    };
-  } else if (await bcrypt.compare(ctx.request.body.password, hashPassword)) {
-    await user
-      .$query()
-      .findById(user.id)
-      .patch({ lastSeen: new Date(+new Date()) });
-
-    // eslint-disable-next-line require-atomic-updates
     ctx.body = {
       token: jsonwebtoken.sign({
         data: userInfoWithoutPassword,

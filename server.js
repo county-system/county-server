@@ -20,7 +20,7 @@ app.use(cors({
   maxAge: 5,
   credentials: true,
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowHeaders: ['Content-Type', 'Authorization', 'Accept', 'mojaHeader', 'achievements'],
+  allowHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With', 'Access-Control-Allow-Origin'],
 }));
 
 app.use(errorHandler);
