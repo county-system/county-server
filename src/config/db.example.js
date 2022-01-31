@@ -1,5 +1,5 @@
 const parseDatabaseUrl = require('../utils/parseDatabaseUrl');
-const { NODE_ENV: env, DATABASE_URL } = process.env || '';
+const { NODE_ENV: env, DATABASE_URL, DATABASE_PASSWORD } = process.env || '';
 
 const dotenv = require('dotenv');
 const log = require('../utils/logger');
@@ -22,15 +22,15 @@ module.exports = {
   test: {
     host: 'localhost',
     database: 'county_test',
-    user: 'mac',
-    password: 'password',
+    user: 'postgres',
+    password: DATABASE_PASSWORD,
     port: '5432'
   },
   development: {
     host: 'localhost',
     database: 'county_dev',
-    user: 'mac',
-    password: 'password',
+    user: 'postgres',
+    password: DATABASE_PASSWORD,
     port: '5432'
   },
   ...data

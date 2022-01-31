@@ -182,59 +182,10 @@ async function getUserById(ctx) {
 
   let userId = (ctx.params.id !== 'current' || ctx.params.id !== 'me') ? ctx.params.id : stateUserId;
 
-  let joinRelations = 'achievementAwards(selectBadgeNameAndId), userRoles(selectNameAndId),' +
-        'enrolledCourses(selectNameAndId)';
-  if (ctx.query && ctx.query.include) {
-    const includes = ctx.query.include.split(',');
-    if (includes.some((v) => v.toLowerCase().includes('followees'))) {
-      joinRelations += ',followees(selectBasicInfo)';
-    }
-    if (includes.some((v) => v.toLowerCase().includes('followers'))) {
-      joinRelations += ',followers(selectBasicInfo)';
-    }
-  }
-  let recordsToSelect = ['*'];
-  if (ctx.query.aggregate) { //not best approach but fine for now
-    const possibleAggregates = [
-      {
-        expect: 'userfollowers', //expected query
-        selectQuery: User.relatedQuery('userFollowers').count().as('totalUserFollowers') //
-      },
-      {
-        expect: 'enrolledcourses',
-        selectQuery: User.relatedQuery('courseEnrollments').count().as('totalCoursesEnrolled')
-      },
-      {
-        expect: 'followedtags',
-        selectQuery: User.relatedQuery('tagsFollowing').count().as('totalTagsFollowed')
-      },
-      {
-        expect: 'approvedchapters',
-        selectQuery: User.relatedQuery('chapters')
-          .where('approved', true).count().as('totalChaptersApproved')
-      }, {
-        expect: 'publishedcourses',
-        selectQuery: User.relatedQuery('courses')
-          .where('status', 'published').count().as('totalChaptersPublished')
-      },
-
-    ];
-
-    const includes = ctx.query.aggregate.split(',');
-
-    includes.map((qr) => {
-      const obj = possibleAggregates.find((p) => qr.toLowerCase().includes(p.expect));
-      if (obj) {
-        recordsToSelect.push(obj.selectQuery);
-      }
-    });
-  }
-
-
   let user = await User.query()
-    .select(recordsToSelect)
+    .select('*')
     .findById(userId)
-    .withGraphFetched(`[${joinRelations}]`);
+    .withGraphFetched('[userRoles(selectNameAndId)]');
 
   ctx.assert(user, 404, 'No User With that Id');
   user.profileUri = await getProfileImage(user);
@@ -248,17 +199,13 @@ async function getUserById(ctx) {
     delete user.updatedAt;
     delete user.contactNumber;
   }
+  log.info(user);
 
   ctx.status = 200;
   ctx.body = { user };
 }
 
 async function getUsers(ctx) {
-
-  let recordsToSelect = ['*'];
-
-
-
   let { page, per_page } = ctx.query;
 
   delete ctx.query.page;
@@ -269,7 +216,7 @@ async function getUsers(ctx) {
 
   try {
     let users = await User.query()
-      .select(recordsToSelect)
+      .select('*')
       .where(ctx.query)
       .withGraphFetched('[userRoles()]')
       .page(page, per_page);
@@ -291,7 +238,7 @@ async function getUsers(ctx) {
       }
     });
 
-
+    log.info(`users.results: ${users.results.length}`);
     ctx.body = {
       meta: {
         total_pages: users.total / per_page

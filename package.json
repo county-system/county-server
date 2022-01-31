@@ -54,12 +54,12 @@
     "validate.js": "^0.13.1"
   },
   "devDependencies": {
+    "@faker-js/faker": "^6.0.0-alpha.5",
     "chai": "^4.2.0",
     "chai-http": "2.0.1",
     "eslint": "^6.4.0",
     "mocha": "^7.1.0",
-    "nyc": "^14.1.1",
-    "faker": "^6.6.6",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "nyc": "^14.1.1"
   }
 }
