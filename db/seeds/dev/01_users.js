@@ -6,6 +6,7 @@ exports.seed = async (knex) => {
 
   let usersSeed = [];
   const genders = ['Male', 'Female', 'N/A', null];
+  const department = ['health', 'sports', 'County office', 'water', 'irrigation'];
 
   usersSeed.push(
     {
@@ -86,7 +87,7 @@ exports.seed = async (knex) => {
         lastName: faker.name.firstName(),
       },
       location: `${faker.address.city()}, ${faker.address.country()}`,
-
+      department: faker.random.arrayElement(department),
     });
   }
 
