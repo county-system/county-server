@@ -132,30 +132,11 @@ async function createUser(ctx) {
  *       "flag": false,
  *       "private": boolean,
  *       "inviteCode": "invited_by",
- *       "achievementAwards": [
- *         {
- *           "id": "achievementaward1",
- *           "name": "completed 10 courses",
- *           "type": "achievementAwards"
- *         },
- *         {
- *           "id": "achievementaward2",
- *           "name": "fully filled profile",
- *           "type": "achievementAwards"
- *         }
- *       ],
  *       "userRoles": [
  *         {
  *           "id": "4hsuh4"
  *           "type": "userRole"
  *         }
- *       ],
- *       "enrolledCourses": [
- *          {
- *            "id": "course1",
- *            "name": "A Course 1",
- *            "type": "course"
- *          }
  *       ],
  *       "userVerification": []
  *    }
