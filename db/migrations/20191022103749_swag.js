@@ -8,6 +8,9 @@ exports.up = knex =>
       table.text('email').unique().index();
       table.text('username').unique().index();
       table.text('hash');
+      table.text('department').defaultTo('');
+      table.text('first_name').defaultTo('');
+      table.text('last_name').defaultTo('');
       table.text('last_seen');
       table.text('last_ip');
       table.jsonb('metadata');

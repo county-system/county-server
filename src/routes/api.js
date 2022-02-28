@@ -2,6 +2,7 @@ const Router = require('koa-router');
 const jwt = require('../middleware/jwt');
 const auth = require('../auth');
 const users = require('../users');
+const calendar = require('../calendar');
 const { env } = require('../config/api');
 
 const router = new Router({
@@ -10,6 +11,7 @@ const router = new Router({
 
 router.use('/auth', auth.API);
 router.use('/users', users.API);
+router.use('/calendars', calendar.API);
 // router.use(require('../users'));
 router.use(jwt.authenticate, require('../user_role'));
 router.use(jwt.authenticate, require('../groups'));
