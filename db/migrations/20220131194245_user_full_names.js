@@ -5,8 +5,9 @@ exports.up = knex =>
       table.text('first_name').defaultTo('');
       table.text('last_name').defaultTo('');
     });
-
 exports.down = knex =>
   knex.schema
-    .dropColumn('users', 'first_name')
-    .dropColumn('users', 'last_name');
+    .alterTable('users', table => {
+      table.dropColumn('first_name');
+      table.dropColumn('last_name');
+    });

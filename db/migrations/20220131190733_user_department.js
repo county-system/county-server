@@ -7,4 +7,8 @@ exports.up = knex =>
 
 exports.down = knex =>
   knex.schema
-    .dropColumn('users', 'department');
+    .alterTable('users', table => {
+      table.dropColumn('department');
+    });
+
+
