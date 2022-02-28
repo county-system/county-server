@@ -4,6 +4,7 @@ const { validateUserLogin } = require('../middleware/validateRoutePostSchema/val
 
 const calendar = new Router();
 calendar.get('/',  controller.getCalendarEvents);
-calendar.post('/', validateUserLogin, controller.saveNewCalendarEvent);
+calendar.get('/:id',  controller.getCalendarEventById);
+calendar.post('/', controller.saveNewCalendarEvent);
 
 module.exports = calendar.routes();

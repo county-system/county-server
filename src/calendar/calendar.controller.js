@@ -26,12 +26,25 @@ class CalendarData {
 
 async function getCalendarEvents(ctx) {
   const results = await Calendar.query();
+  console.log({ calendars: results });
+
   ctx.status = 200;
-  ctx.body = { 'events': results };
+  // ctx.body = { 'events': results };
+  ctx.body = { calendars: results };
 }
 
+
+async function getCalendarEventById(ctx) {
+  const id = ctx.params.id;
+  const result = await Calendar.query()
+    .select('*')
+    .findById(id);
+  console.log(result);
+  ctx.status = 200;
+  ctx.body = result ? result : {};
+}
 async function saveNewCalendarEvent(ctx) {
-  const calendar = ctx.request.body.calendar;
+  const { calendar } = ctx.request.body;
 
   try {
     let newCalendar = new CalendarData();
@@ -49,6 +62,8 @@ async function saveNewCalendarEvent(ctx) {
     newCalendar.calendarId = calendar.calendarId;
     newCalendar.createdAt = new Date();
     newCalendar.updatedAt = new Date();
+    log.info(newCalendar);
+
     const results = await Calendar.query().insert(newCalendar);
 
     ctx.status = 201;
@@ -66,5 +81,6 @@ async function saveNewCalendarEvent(ctx) {
 
 module.exports = {
   saveNewCalendarEvent,
-  getCalendarEvents
+  getCalendarEvents,
+  getCalendarEventById,
 };
