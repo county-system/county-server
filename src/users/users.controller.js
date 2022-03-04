@@ -175,10 +175,7 @@ async function getUserById(ctx) {
 
   user = user.toJSON();
   if (stateUserId !== userId) {
-    delete user.email;
-    delete user.username;
     delete user.updatedAt;
-    delete user.contactNumber;
   }
   log.info(user);
 

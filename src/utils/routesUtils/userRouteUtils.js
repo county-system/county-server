@@ -27,10 +27,10 @@ async function getProfileImage(user) {
       if(user.profileUri &&  fs.existsSync(path.resolve(`public/${user.profileUri}`))){
         return user.profileUri;
       }
-      return  '/uploads/images/profile-placeholder.gif';
+      return  '/images/avatar.png';
     }
   } catch (e) {
-    return '/uploads/images/profile-placeholder.gif';
+    return '/images/avatar.png';
   }
 }
 async function createPasswordHash(ctx, next) {
