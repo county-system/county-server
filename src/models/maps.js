@@ -1,10 +1,10 @@
 const Model = require("./_model");
 const knex = require("../../db/db");
 
-class Calendar extends Model {
+class Maps extends Model {
 
   static get tableName() {
-    return "calendar";
+    return "Maps";
   }
 
   async $indexForSearch() {
@@ -21,5 +21,5 @@ class Calendar extends Model {
 
 }
 
-Calendar.knex(knex);
-module.exports = Calendar;
+Maps.knex(knex);
+module.exports = Maps;

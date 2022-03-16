@@ -1,10 +1,10 @@
-const Model = require('./_model');
-const knex = require('../../db/db');
+const Model = require("./_model");
+const knex = require("../../db/db");
 
 class GroupMembers extends Model {
 
   static get tableName() {
-    return 'group_members';
+    return "group_members";
   }
 
   async $indexForSearch() {
@@ -15,22 +15,22 @@ class GroupMembers extends Model {
     return {
       users: {
         relation: Model.ManyToManyRelation,
-        modelClass: __dirname + '/users',
+        modelClass: __dirname + "/users",
         join: {
-          from: 'groups.id',
+          from: "groups.id",
           through: {
-            from: 'group_members.groupId',
-            to: 'group_members.userId'
+            from: "group_members.groupId",
+            to: "group_members.userId"
           },
-          to: 'users.id'
+          to: "users.id"
         }
       },
       group: {
         relation: Model.HasManyRelation,
-        modelClass: __dirname + '/group',
+        modelClass: __dirname + "/group",
         join: {
-          from: 'group_members.groupId',
-          to: 'groups.id'
+          from: "group_members.groupId",
+          to: "groups.id"
         }
       }
     };
@@ -39,7 +39,7 @@ class GroupMembers extends Model {
   static get modifiers() {
     return {
       selectNameAndId: (builder) => {
-        builder.select('group_members.id');
+        builder.select("group_members.id");
       }
     };
   }

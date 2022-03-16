@@ -1,4 +1,4 @@
-const EventEmitter = require('events');
+const EventEmitter = require("events");
 const socketEventEmitter = new EventEmitter();
 const storageHooksEventEmitter = new EventEmitter();
 

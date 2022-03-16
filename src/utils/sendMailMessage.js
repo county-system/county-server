@@ -1,11 +1,11 @@
-const Mailgun = require('mailgun-js');
+const Mailgun = require("mailgun-js");
 
-const environment = process.env.NODE_ENV || 'development';
+const environment = process.env.NODE_ENV || "development";
 let emailAuth;
 try {
-  emailAuth = require('../config/email')[environment];
+  emailAuth = require("../config/email")[environment];
 } catch (e) {
-  emailAuth = require('../config/email.example')[environment];
+  emailAuth = require("../config/email.example")[environment];
 }
 
 let mg;
@@ -26,11 +26,11 @@ const registrationEmailData = (
 ) => {
   return {
     from: emailAuth.defaultFrom,
-    to: Buffer.from(encryptedEmail, 'base64').toString('ascii'),
+    to: Buffer.from(encryptedEmail, "base64").toString("ascii"),
     subject: subject,
     template: templateName,
-    'v:url': link,
-    'v:name': fullName,
+    "v:url": link,
+    "v:name": fullName,
   };
 };
 
@@ -43,11 +43,11 @@ const passwordResetEmailData = (
 ) => {
   return {
     from: emailAuth.defaultFrom,
-    to: Buffer.from(encryptedEmail, 'base64').toString('ascii'),
+    to: Buffer.from(encryptedEmail, "base64").toString("ascii"),
     subject: subject,
     template: templateName,
-    'v:url': link,
-    'v:name': fullName,
+    "v:url": link,
+    "v:name": fullName,
   };
 };
 
@@ -62,7 +62,7 @@ const passwordResetSuccessEmailData = (
     to: email,
     subject: subject,
     template: templateName,
-    'v:name': username,
+    "v:name": username,
   };
 };
 

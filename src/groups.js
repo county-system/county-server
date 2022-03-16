@@ -1,9 +1,9 @@
-const Router = require('koa-router');
-const { requireAuth, grantAccess } = require('./middleware/permController');
-const groupModel = require('./models/group');
+const Router = require("koa-router");
+const { requireAuth, grantAccess } = require("./middleware/permController");
+const groupModel = require("./models/group");
 
 const router = new Router({
-  prefix: '/groups'
+  prefix: "/groups"
 });
 
 
@@ -18,7 +18,7 @@ const router = new Router({
  *
  */
 
-router.get('/', requireAuth, grantAccess('readAny', 'private'), async ctx => {
+router.get("/", requireAuth, grantAccess("readAny", "private"), async ctx => {
   const groups = await groupModel.query();
 
   ctx.status = 200;
@@ -37,10 +37,10 @@ router.get('/', requireAuth, grantAccess('readAny', 'private'), async ctx => {
  *
  *
  */
-router.get('/:id', requireAuth, grantAccess('readAny', 'private'), async ctx => {
+router.get("/:id", requireAuth, grantAccess("readAny", "private"), async ctx => {
 
-  const group = await groupModel.query().where('id', ctx.params.id);
-  ctx.assert(group, 404, 'Group not found');
+  const group = await groupModel.query().where("id", ctx.params.id);
+  ctx.assert(group, 404, "Group not found");
   ctx.status = 200;
   ctx.body = { group };
 });

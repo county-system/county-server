@@ -1,6 +1,6 @@
-const Calendar = require('../models/calendar');
-const Chance = require('chance');
-const log = require('../utils/logger');
+const Calendar = require("../models/calendar");
+const Chance = require("chance");
+const log = require("../utils/logger");
 const chance = new Chance();
 
 
@@ -37,7 +37,7 @@ async function getCalendarEvents(ctx) {
 async function getCalendarEventById(ctx) {
   const id = ctx.params.id;
   const result = await Calendar.query()
-    .select('*')
+    .select("*")
     .findById(id);
   console.log(result);
   ctx.status = 200;
@@ -70,7 +70,7 @@ async function saveNewCalendarEvent(ctx) {
     ctx.body = results;
 
   } catch (e) {
-    log.info('Email verification already requested');
+    log.info("Email verification already requested");
     if (e.statusCode) {
       ctx.throw(e.statusCode, e, { errors: [e.message] });
     } else { ctx.throw(400, e, { errors: [e.message] }); }

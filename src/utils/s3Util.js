@@ -1,5 +1,5 @@
-const AWS = require('aws-sdk');
-const log = require('./logger');
+const AWS = require("aws-sdk");
+const log = require("./logger");
 
 let config, s3;
 
@@ -7,7 +7,7 @@ async function checkS3Credentials() {
 
   try {
     //Check for a config file. If no file is present files will be uploaded to local storage
-    config = require('../config/s3.js');
+    config = require("../config/s3.js");
 
     //Check that IAM user has credentials to get bucket policy.
     //Policy should also include read/write permissions for IAM user on bucket
@@ -17,15 +17,15 @@ async function checkS3Credentials() {
     //even without correct permissions
     await s3.getBucketPolicy({ Bucket: config.bucket }).promise();
 
-    log.info('Successfully connected to AWS S3 bucket.');
+    log.info("Successfully connected to AWS S3 bucket.");
   }
 
   catch (e) {
-    if (e.code === 'MODULE_NOT_FOUND') {
-      log.warn('No S3 configuration found. File uploads will be stored locally');
+    if (e.code === "MODULE_NOT_FOUND") {
+      log.warn("No S3 configuration found. File uploads will be stored locally");
     }
-    else if (e.name === 'AccessDenied') {
-      log.error('Access denied to AWS service. Ensure that permissions and policies are correct. File uploads will be stored locally');
+    else if (e.name === "AccessDenied") {
+      log.error("Access denied to AWS service. Ensure that permissions and policies are correct. File uploads will be stored locally");
     }
     else {
       log.error(`AWS S3 error '${e.name}'. Files will not be uploaded.`);

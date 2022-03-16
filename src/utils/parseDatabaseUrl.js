@@ -1,4 +1,4 @@
-const url = require('url');
+const url = require("url");
 /**
  * This is the exported function that parses database URLs.
  *
@@ -15,8 +15,8 @@ function parseDatabaseUrl(databaseUrl) {
   config.database = parsedUrl.pathname.slice(1);
   config.host = parsedUrl.hostname;
   config.port = parsedUrl.port;
-  config.user = parsedUrl.auth.split(':')[0];
-  config.password = parsedUrl.auth.split(':')[1];
+  config.user = parsedUrl.auth.split(":")[0];
+  config.password = parsedUrl.auth.split(":")[1];
   return config;
 }
 

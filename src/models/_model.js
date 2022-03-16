@@ -1,8 +1,8 @@
-const { Model } = require('objection');
-const knex = require('../../db/db');
-const _ = require('lodash');
-const SearchQueryBuilder = require('../utils/querybuilder');
-const client = require('../utils/search');
+const { Model } = require("objection");
+const knex = require("../../db/db");
+const _ = require("lodash");
+const SearchQueryBuilder = require("../utils/querybuilder");
+const client = require("../utils/search");
 
 class Base extends Model {
 

@@ -1,24 +1,24 @@
-require('dotenv').config();
+require("dotenv").config();
 
 let environment = process.env.NODE_ENV;
 if (!process.env.NODE_ENV) {
-  environment = process.argv.indexOf('--cypress') > -1 ? 'test' : 'development';
+  environment = process.argv.indexOf("--cypress") > -1 ? "test" : "development";
   process.env.NODE_ENV = environment;
 }
 console.log(`ENVIRONMENT: ${environment}`);
 
-const http = require('http');
+const http = require("http");
 /*
  * Express Setup
  */
 
-const app = require('./server');
+const app = require("./server");
 
 /*
  * Get port from environment (default 3000)
  */
 const port = process.env.PORT ? process.env.PORT :
-  process.argv.indexOf('--port') > -1 ? process.argv[process.argv.indexOf('--port') + 1] : 3000;
+  process.argv.indexOf("--port") > -1 ? process.argv[process.argv.indexOf("--port") + 1] : 3000;
 
 // app.set('port', port);
 // app.set('host', '0.0.0.0');
@@ -36,9 +36,9 @@ const server = http.createServer(app.callback());
 if (require.main === module) {
   server.listen(port);
 
-  server.on('listening', () => {
+  server.on("listening", () => {
     const addr = server.address();
-    const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
+    const bind = typeof addr === "string" ? `pipe ${addr}` : `port ${addr.port}`;
     console.log(`Listening on ${bind}`);
   });
 }

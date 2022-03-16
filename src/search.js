@@ -1,15 +1,15 @@
-const _ = require('lodash');
-const Router = require('koa-router');
-const log = require('./utils/logger');
-const search = require('./utils/search');
+const _ = require("lodash");
+const Router = require("koa-router");
+const log = require("./utils/logger");
+const search = require("./utils/search");
 
 const models = {
   // chapter: require('./models/chapter'),
-  user: require('./models/user')
+  user: require("./models/user")
 };
 
 const router = new Router({
-  prefix: '/search'
+  prefix: "/search"
 });
 
 
@@ -39,24 +39,24 @@ const router = new Router({
  *
  *
  */
-router.get('/chapter', async ctx => {
+router.get("/chapter", async ctx => {
 
   let chapter = models.chapter.query();
   if (ctx.query.q) {
     chapter = await chapter
-      .where({ approved: 'true' })
-      .where('name', 'ILIKE', `%${ctx.query.q}%`)
-      .orWhere('description', 'ILIKE', `%${ctx.query.q}%`);
+      .where({ approved: "true" })
+      .where("name", "ILIKE", `%${ctx.query.q}%`)
+      .orWhere("description", "ILIKE", `%${ctx.query.q}%`);
   } else if (ctx.query.tags) {
     chapter = await chapter
-      .where({ approved: 'true' })
-      .whereRaw('? = ANY(tags)', `${ctx.query.tags}`);
+      .where({ approved: "true" })
+      .whereRaw("? = ANY(tags)", `${ctx.query.tags}`);
   }
   ctx.status = 200;
-  ctx.body = { 'search': chapter };
+  ctx.body = { "search": chapter };
 });
 
-router.get('/elastic', async ctx => {
+router.get("/elastic", async ctx => {
   const queryText = ctx.query.q;
   try {
     const elasticResponse = await search.search({
@@ -64,15 +64,15 @@ router.get('/elastic', async ctx => {
       body: {
         query: {
           query_string: {
-            fields: ['name^2', 'description', 'tags'],
+            fields: ["name^2", "description", "tags"],
             query: queryText
           }
         },
         highlight: {
-          pre_tags: ['<strong>'],
-          post_tags: ['</strong>'],
+          pre_tags: ["<strong>"],
+          post_tags: ["</strong>"],
           fields: {
-            '*': {}
+            "*": {}
           }
         }
       }
@@ -87,10 +87,10 @@ router.get('/elastic', async ctx => {
 
     ctx.body = grouped;
   } catch (e) {
-    if (e.name === 'ConnectionError') {
+    if (e.name === "ConnectionError") {
       ctx.status = 502;
       ctx.body = {
-        error: 'Search Unavailable'
+        error: "Search Unavailable"
       };
     }
   }

@@ -1,4 +1,4 @@
-const validate = require('validate.js');
+const validate = require("validate.js");
 
 async function validateNewUser(ctx, next) {
   try {
@@ -27,7 +27,7 @@ async function validateNewUser(ctx, next) {
       },
       username: {
         presence: true,
-        format: '[a-zA-Z0-9_-]*'
+        format: "[a-zA-Z0-9_-]*"
       },
       password: {
         presence: true,
@@ -38,8 +38,8 @@ async function validateNewUser(ctx, next) {
       }
     });
   } catch (e) {
-    if (e['username']) {
-      e['constraint'] = 'wrong_wrong';
+    if (e["username"]) {
+      e["constraint"] = "wrong_wrong";
       console.log(e);
       return ctx.throw(400, { errors: [e] });
     }
@@ -52,7 +52,7 @@ async function validateUserLogin(ctx, next) {
     await validate.async(ctx.request.body, {
       username: {
         presence: true,
-        format: '[a-zA-Z0-9_-]*'
+        format: "[a-zA-Z0-9_-]*"
       },
       password: {
         presence: true,

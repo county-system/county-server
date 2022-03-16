@@ -1,9 +1,9 @@
-const Router = require('koa-router');
-const { requireAuth, grantAccess } = require('./middleware/permController');
-const groupMembers = require('./models/group_members');
+const Router = require("koa-router");
+const { requireAuth, grantAccess } = require("./middleware/permController");
+const groupMembers = require("./models/group_members");
 
 const router = new Router({
-  prefix: '/userRole'
+  prefix: "/userRole"
 });
 
 
@@ -51,9 +51,9 @@ const router = new Router({
  *
  */
 
-router.get('/', requireAuth, grantAccess('readAny', 'private'), async ctx => {
-  const user_role = await groupMembers.query().where(ctx.query).withGraphFetched('group');
-  ctx.assert(user_role, 404, 'No users with roles yet');
+router.get("/", requireAuth, grantAccess("readAny", "private"), async ctx => {
+  const user_role = await groupMembers.query().where(ctx.query).withGraphFetched("group");
+  ctx.assert(user_role, 404, "No users with roles yet");
 
   ctx.status = 200;
   ctx.body = { user_role };
@@ -101,12 +101,12 @@ router.get('/', requireAuth, grantAccess('readAny', 'private'), async ctx => {
  *      ]
  *
  */
-router.get('/:id', requireAuth, grantAccess('readAny', 'private'), async ctx => {
+router.get("/:id", requireAuth, grantAccess("readAny", "private"), async ctx => {
   let stateUserId = ctx.state.user.id === undefined ? ctx.state.user.data.id : ctx.state.user.id;
-  let userId = (ctx.params.id !== 'current' || ctx.params.id !== 'me') ? stateUserId : ctx.params.id;
+  let userId = (ctx.params.id !== "current" || ctx.params.id !== "me") ? stateUserId : ctx.params.id;
 
-  const user_role = await groupMembers.query().where('user_id', userId).withGraphFetched('group');
-  ctx.assert(user_role, 404, 'The current user has no role yet');
+  const user_role = await groupMembers.query().where("user_id", userId).withGraphFetched("group");
+  ctx.assert(user_role, 404, "The current user has no role yet");
   ctx.status = 200;
   ctx.body = { user_role };
 });
@@ -137,13 +137,13 @@ router.get('/:id', requireAuth, grantAccess('readAny', 'private'), async ctx => 
  *
  */
 
-router.put('/:id', requireAuth, grantAccess('updateAny', 'private'), async ctx => {
+router.put("/:id", requireAuth, grantAccess("updateAny", "private"), async ctx => {
   const userId = ctx.params.id;
   const data = ctx.request.body.userRole;
   const user_role = await groupMembers.query()
     .patch(data)
-    .where({ 'user_id': userId })
-    .returning('*');
+    .where({ "user_id": userId })
+    .returning("*");
   ctx.status = 200;
   ctx.body = { user_role };
 });

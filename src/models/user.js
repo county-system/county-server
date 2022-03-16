@@ -1,11 +1,11 @@
-const Model = require('./_model');
-const knex = require('../../db/db');
-const userSchema = require('../../db/json_schema/userSchema');
+const Model = require("./_model");
+const knex = require("../../db/db");
+const userSchema = require("../../db/json_schema/userSchema");
 
 class User extends Model {
 
   static get tableName() {
-    return 'users';
+    return "users";
   }
 
   static get jsonSchema() {
@@ -13,7 +13,7 @@ class User extends Model {
   }
 
   static get virtualAttributes() {
-    return ['name'];
+    return ["name"];
   }
 
   get name() {
@@ -32,11 +32,11 @@ class User extends Model {
     return this.username;
   }
   get $virtualFields() {
-    return ['firstName', 'lastName', 'aboutMe'];
+    return ["firstName", "lastName", "aboutMe"];
   }
 
   get $secureFields() {
-    return ['hash', 'lastIp', 'resetPasswordToken', 'resetPasswordExpires'];
+    return ["hash", "lastIp", "resetPasswordToken", "resetPasswordExpires"];
   }
 
   $beforeInsert() {
@@ -52,14 +52,14 @@ class User extends Model {
     return {
       userRoles: {
         relation: Model.ManyToManyRelation,
-        modelClass: __dirname + '/group',
+        modelClass: __dirname + "/group",
         join: {
-          from: 'users.id',
+          from: "users.id",
           through: {
-            from: 'group_members.userId',
-            to: 'group_members.groupId'
+            from: "group_members.userId",
+            to: "group_members.groupId"
           },
-          to: 'groups.id'
+          to: "groups.id"
         }
       },
     };
@@ -68,13 +68,13 @@ class User extends Model {
   static get modifiers() {
     return {
       selectNameAndId: (builder) => {
-        builder.select('users.id', 'name');
+        builder.select("users.id", "name");
       },
       selectNameAndProfile: (builder) => {
-        builder.select('username', 'profileUri');
+        builder.select("username", "profileUri");
       },
       selectBasicInfo: (query) => {
-        query.select('users.id', 'username', 'metadata', 'profileUri','email');
+        query.select("users.id", "username", "metadata", "profileUri","email");
       },
     };
   }

@@ -1,25 +1,25 @@
-const path = require('path');
+const path = require("path");
 
-const { nanoid } = require('nanoid/async');
-const sharp = require('sharp');
-const crypto = require('crypto');
+const { nanoid } = require("nanoid/async");
+const sharp = require("sharp");
+const crypto = require("crypto");
 
-const User = require('../models/user');
-const mailer = require('../utils/sendMailMessage');
-const knex = require('../utils/knexUtil');
-const log = require('../utils/logger');
-const s3 = require('../utils/s3Util');
-const { getProfileImage } = require('../utils/routesUtils/userRouteUtils');
+const User = require("../models/user");
+const mailer = require("../utils/sendMailMessage");
+const knex = require("../utils/knexUtil");
+const log = require("../utils/logger");
+const s3 = require("../utils/s3Util");
+const { getProfileImage } = require("../utils/routesUtils/userRouteUtils");
 
-const DOMAIN_NAME = process.env.DOMAIN_NAME || 'http://localhost:4200';
+const DOMAIN_NAME = process.env.DOMAIN_NAME || "http://localhost:4200";
 
 const sendVerificationEmail = async (user, email) => {
-  const token = crypto.randomBytes(64).toString('hex');
-  const buf = Buffer.from(email, 'ascii').toString('base64');
+  const token = crypto.randomBytes(64).toString("hex");
+  const buf = Buffer.from(email, "ascii").toString("base64");
 
   const userData = await user.$query().patchAndFetch({
-    'resetPasswordExpires': new Date(+new Date() + 1.8e6),
-    'resetPasswordToken': token,
+    "resetPasswordExpires": new Date(+new Date() + 1.8e6),
+    "resetPasswordToken": token,
   });
     // sending email
   const link = `${DOMAIN_NAME}/verify?email=${buf}&token=${token}`;
@@ -31,13 +31,13 @@ const sendVerificationEmail = async (user, email) => {
         buf,
         userData.username,
         link,
-        'email_verification',
-        'Welcome to Wikonnect! Please confirm your email'
+        "email_verification",
+        "Welcome to Wikonnect! Please confirm your email"
       )
     );
 
   // await sendMailMessage(buf, userData.username, link, 'email_verification', 'Welcome to Wikonnect! Please confirm your email');
-  log.info('Email verification sent to %s', email);
+  log.info("Email verification sent to %s", email);
 
   return userData;
 };
@@ -74,7 +74,7 @@ const sendVerificationEmail = async (user, email) => {
 async function createUser(ctx) {
   ctx.request.body.user.username = ctx.request.body.user.username.toLowerCase();
   ctx.request.body.user.email = ctx.request.body.user.email.toLowerCase();
-  ctx.request.body.user.metadata = { 'profileComplete': 'false', 'oneInviteComplete': 'false' };
+  ctx.request.body.user.metadata = { "profileComplete": "false", "oneInviteComplete": "false" };
 
   const invitedBy = ctx.request.body.user.inviteCode;
 
@@ -83,22 +83,22 @@ async function createUser(ctx) {
   newUser.lastIp = ctx.request.ip;
 
   const userCheck = await User.query();
-  let role = !userCheck.length ? 'groupAdmin' : 'groupBasic';
+  let role = !userCheck.length ? "groupAdmin" : "groupBasic";
 
   delete newUser.profileUri; //avoids external profile links at the moment
 
   try {
     const user = await User.query().insertAndFetch(newUser);
-    await knex('group_members').insert({ 'user_id': user.id, 'group_id': role });
-    await knex('user_invite').insert([{ 'invited_by': invitedBy, user_id: user.id }], ['id', 'invited_by', 'user_id']);
+    await knex("group_members").insert({ "user_id": user.id, "group_id": role });
+    await knex("user_invite").insert([{ "invited_by": invitedBy, user_id: user.id }], ["id", "invited_by", "user_id"]);
 
-    log.info('Created a user with id %s with username %s with the invite code %s', user.id, user.username, user.inviteCode);
+    log.info("Created a user with id %s with username %s with the invite code %s", user.id, user.username, user.inviteCode);
     sendVerificationEmail(user, ctx.request.body.user.email);
 
     ctx.status = 201;
     ctx.body = { user };
   } catch (e) {
-    log.error('Failed for user - %s, with error %s', ctx.request.body.user.email, e.message, e.detail);
+    log.error("Failed for user - %s, with error %s", ctx.request.body.user.email, e.message, e.detail);
     ctx.throw(400, null, { errors: [e] });
   }
 }
@@ -161,16 +161,16 @@ async function getUserById(ctx) {
 
   let stateUserId = ctx.state.user.id === undefined ? ctx.state.user.data.id : ctx.state.user.id;
 
-  let userId = (ctx.params.id !== 'current' || ctx.params.id !== 'me') ? ctx.params.id : stateUserId;
+  let userId = (ctx.params.id !== "current" || ctx.params.id !== "me") ? ctx.params.id : stateUserId;
 
   let user = await User.query()
-    .select('*')
+    .select("*")
     .findById(userId)
-    .withGraphFetched('[userRoles(selectNameAndId)]');
+    .withGraphFetched("[userRoles(selectNameAndId)]");
 
-  ctx.assert(user, 404, 'No User With that Id');
+  ctx.assert(user, 404, "No User With that Id");
   user.profileUri = await getProfileImage(user);
-  log.info('Got a request from %s for %s', ctx.request.ip, ctx.path);
+  log.info("Got a request from %s for %s", ctx.request.ip, ctx.path);
 
 
   user = user.toJSON();
@@ -194,12 +194,12 @@ async function getUsers(ctx) {
 
   try {
     let users = await User.query()
-      .select('*')
+      .select("*")
       .where(ctx.query)
-      .withGraphFetched('[userRoles()]')
+      .withGraphFetched("[userRoles()]")
       .page(page, per_page);
 
-    ctx.assert(users, 404, 'No User With that username');
+    ctx.assert(users, 404, "No User With that username");
 
 
     //for each user, get their profile image
@@ -225,7 +225,7 @@ async function getUsers(ctx) {
     };
   } catch (e) {
     if (e.statusCode) {
-      ctx.throw(e.statusCode, { message: 'The query key does not exist' });
+      ctx.throw(e.statusCode, { message: "The query key does not exist" });
     } else { ctx.throw(406, null, { errors: [e.message] }); }
   }
 
@@ -245,7 +245,7 @@ async function updateUserById(ctx) {
   delete data.profileUri; //avoids external profile links at the moment
 
   const user = await User.query().patchAndFetchById(ctx.params.id, data);
-  ctx.assert(user, 404, 'That user does not exist.');
+  ctx.assert(user, 404, "That user does not exist.");
 
   ctx.status = 200;
   ctx.body = { user };
@@ -253,8 +253,8 @@ async function updateUserById(ctx) {
 }
 
 async function storeInviteId(ctx) {
-  const invite = await knex('user_invite').insert([{ user_id: ctx.params.id, 'invited_by': ctx.request.body.user.inviteBy }], ['id', 'invited_by', 'user_id']);
-  ctx.assert(invite, 404, 'That user does not exist.');
+  const invite = await knex("user_invite").insert([{ user_id: ctx.params.id, "invited_by": ctx.request.body.user.inviteBy }], ["id", "invited_by", "user_id"]);
+  ctx.assert(invite, 404, "That user does not exist.");
 
   ctx.status = 200;
   ctx.body = { invite };
@@ -277,18 +277,18 @@ async function storeInviteId(ctx) {
 
 async function uploadProfileImage(ctx) {
 
-  ctx.assert(ctx.request.files.file, 400, 'No file image uploaded');
+  ctx.assert(ctx.request.files.file, 400, "No file image uploaded");
 
   const fileNameBase = await nanoid(11);
-  const uploadPath = 'uploads/images/profile';
-  const uploadDir = path.resolve(__dirname, '../public/' + uploadPath);
+  const uploadPath = "uploads/images/profile";
+  const uploadDir = path.resolve(__dirname, "../public/" + uploadPath);
 
   const { file } = ctx.request.files;
 
   const fileExtension = path.extname(file.name);
 
-  if (!['.webp', '.svg', '.png', '.jpeg', '.gif', '.avif', '.jpg'].includes(fileExtension)) {
-    ctx.throw(400, { error: 'Image format not supported' });
+  if (![".webp", ".svg", ".png", ".jpeg", ".gif", ".avif", ".jpg"].includes(fileExtension)) {
+    ctx.throw(400, { error: "Image format not supported" });
   }
 
   let resizer;
@@ -316,10 +316,10 @@ async function uploadProfileImage(ctx) {
     try {
       //Upload image to AWS S3 bucket
       const uploaded = await s3.s3.upload(params).promise();
-      log.info('Uploaded in:', uploaded.Location);
+      log.info("Uploaded in:", uploaded.Location);
       const user = await User.query().patchAndFetchById(ctx.params.id, { profileUri: fileNameBase });
 
-      user.profileUri = 'data:image/(png|jpg);base64,' + buffer.toString('base64'); //since s3 will not alter the image
+      user.profileUri = "data:image/(png|jpg);base64," + buffer.toString("base64"); //since s3 will not alter the image
 
       ctx.body = { user };
     } catch (e) {
@@ -370,7 +370,7 @@ async function uploadProfileImage(ctx) {
 
 async function sendVerification(ctx) {
   const email = ctx.request.body.user.email;
-  const user = await User.query().findOne({ 'email': email, 'emailVerified': false });
+  const user = await User.query().findOne({ "email": email, "emailVerified": false });
   ctx.assert(user, 404, user);
 
   try {
@@ -379,7 +379,7 @@ async function sendVerification(ctx) {
     ctx.body = userData;
 
   } catch (e) {
-    log.info('Email verification already requested');
+    log.info("Email verification already requested");
     if (e.statusCode) {
       ctx.throw(e.statusCode, e, { errors: [e.message] });
     } else { ctx.throw(400, e, { errors: [e.message] }); }
@@ -403,17 +403,17 @@ async function sendVerification(ctx) {
  */
 
 async function verifyEmail(ctx) {
-  const decodedMail = Buffer.from(ctx.query.email, 'base64').toString('ascii');
+  const decodedMail = Buffer.from(ctx.query.email, "base64").toString("ascii");
   const token = ctx.query.token;
-  let user = await User.query().findOne({ 'email': decodedMail, 'resetPasswordToken': token });
-  ctx.assert(user, 404, 'No email found');
+  let user = await User.query().findOne({ "email": decodedMail, "resetPasswordToken": token });
+  ctx.assert(user, 404, "No email found");
   let verifiedData;
   if (new Date() < user.resetPasswordExpires) {
     try {
       verifiedData = await user.$query().patchAndFetch({
-        'emailVerified': true,
-        'resetPasswordExpires': new Date(),
-        'resetPasswordToken': null
+        "emailVerified": true,
+        "resetPasswordExpires": new Date(),
+        "resetPasswordToken": null
       });
       ctx.status = 200;
       ctx.body = { verifiedData };
@@ -425,8 +425,8 @@ async function verifyEmail(ctx) {
     }
 
   } else {
-    log.info('Email verification has expired');
-    throw new Error('Email verification has expired');
+    log.info("Email verification has expired");
+    throw new Error("Email verification has expired");
   }
 
 }

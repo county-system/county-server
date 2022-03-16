@@ -1,13 +1,13 @@
-const path = require('path');
-const fs = require('fs');
-const bcrypt = require('bcrypt');
-const fetch = require('node-fetch');
+const path = require("path");
+const fs = require("fs");
+const bcrypt = require("bcrypt");
+const fetch = require("node-fetch");
 
-const s3 = require('../s3Util');
+const s3 = require("../s3Util");
 
 function encode(data) {
   let buf = Buffer.from(data);
-  return buf.toString('base64');
+  return buf.toString("base64");
 }
 
 async function getProfileImage(user) {
@@ -19,7 +19,7 @@ async function getProfileImage(user) {
         Key: `uploads/profiles/${user.profileUri}.jpg`, // key for retrieving a filename
       };
       const getImage = await s3.s3.getObject(params).promise();
-      return 'data:image/(png|jpg);base64,' + encode(getImage.Body);
+      return "data:image/(png|jpg);base64," + encode(getImage.Body);
     } else {
       if (user.profileUri && user.profileUri.match(/^[a-z0-9]+:\/\//i)){
         return user.profileUri;
@@ -27,10 +27,10 @@ async function getProfileImage(user) {
       if(user.profileUri &&  fs.existsSync(path.resolve(`public/${user.profileUri}`))){
         return user.profileUri;
       }
-      return  '/images/avatar.png';
+      return  "/images/avatar.png";
     }
   } catch (e) {
-    return '/images/avatar.png';
+    return "/images/avatar.png";
   }
 }
 async function createPasswordHash(ctx, next) {
@@ -44,12 +44,12 @@ async function createPasswordHash(ctx, next) {
 }
 
 async function getGoogleToken(ctx, next) {
-  if (ctx.request.body.user.username === 'google'){
-    const response = await fetch('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=' + ctx.request.body.user.password);
+  if (ctx.request.body.user.username === "google"){
+    const response = await fetch("https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=" + ctx.request.body.user.password);
 
     const body = await response.text();
     console.log(body);
-    console.log('\tsent token');
+    console.log("\tsent token");
     ctx.request.body.user.email = body.email;
     // const userId = response.user_id;
     // const userEmail = response.email;

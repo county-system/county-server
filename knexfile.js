@@ -1,15 +1,15 @@
-require('dotenv').config();
+require("dotenv").config();
 // Update with your config settings.
-const path = require('path');
-const log = require('./src/utils/logger');
-const BASE_PATH = path.join(__dirname, 'db');
+const path = require("path");
+const log = require("./src/utils/logger");
+const BASE_PATH = path.join(__dirname, "db");
 
 let connections;
 
 try {
-  connections = require('./src/config/db');
+  connections = require("./src/config/db");
 } catch (e) {
-  connections = require('./src/config/db.example');
+  connections = require("./src/config/db.example");
 }
 
 const {
@@ -33,7 +33,7 @@ if (user && host && database && password) {
 
 module.exports = {
   ci: {
-    client: 'pg',
+    client: "pg",
     connection: {
       port: process.env.PG_PORT,
       host: process.env.PG_HOST,
@@ -41,51 +41,51 @@ module.exports = {
       user: process.env.PG_USER
     },
     migrations: {
-      directory: path.join(BASE_PATH, 'migrations')
+      directory: path.join(BASE_PATH, "migrations")
     },
     seeds: {
-      directory: path.join(BASE_PATH, 'seeds/dev')
+      directory: path.join(BASE_PATH, "seeds/dev")
     }
   },
   action: {
-    client: 'pg',
+    client: "pg",
     connection: env_credentials || connections.action,
     migrations: {
-      directory: path.join(BASE_PATH, 'migrations')
+      directory: path.join(BASE_PATH, "migrations")
     },
     seeds: {
-      directory: path.join(BASE_PATH, 'seeds/dev')
+      directory: path.join(BASE_PATH, "seeds/dev")
     }
   },
   test: {
-    client: 'pg',
+    client: "pg",
     connection: env_credentials || connections.test,
     migrations: {
-      directory: path.join(BASE_PATH, 'migrations')
+      directory: path.join(BASE_PATH, "migrations")
     },
     seeds: {
-      directory: path.join(BASE_PATH, 'seeds/dev')
+      directory: path.join(BASE_PATH, "seeds/dev")
     }
   },
   development: {
     debug: true,
-    client: 'pg',
+    client: "pg",
     connection: env_credentials || connections.development,
     migrations: {
-      directory: path.join(BASE_PATH, 'migrations')
+      directory: path.join(BASE_PATH, "migrations")
     },
     seeds: {
-      directory: path.join(BASE_PATH, 'seeds/dev')
+      directory: path.join(BASE_PATH, "seeds/dev")
     },
   },
   production: {
-    client: 'pg',
+    client: "pg",
     connection: process.env.DATABASE_URL || connections.production,
     migrations: {
-      directory: path.join(BASE_PATH, 'migrations')
+      directory: path.join(BASE_PATH, "migrations")
     },
     seeds: {
-      directory: path.join(BASE_PATH, 'seeds/dev')
+      directory: path.join(BASE_PATH, "seeds/dev")
     },
     log: {
       error(message) {

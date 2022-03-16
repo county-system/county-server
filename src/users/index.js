@@ -1,5 +1,5 @@
-const controller = require('./users.controller');
-const API =  require('./users.routes');
+const controller = require("./users.controller");
+const API =  require("./users.routes");
 
 const users = {
   API,

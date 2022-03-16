@@ -1,10 +1,10 @@
-const Router = require('koa-router');
+const Router = require("koa-router");
 const health = Router();
 
-health.get('/', ctx => {
+health.get("/", ctx => {
   const data = {
     uptime: process.uptime(),
-    message: 'Ok',
+    message: "Ok",
     date: new Date()
   };
 
