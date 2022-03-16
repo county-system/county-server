@@ -4,6 +4,7 @@ const auth = require("../auth");
 const users = require("../users");
 const calendar = require("../calendar");
 const { env } = require("../config/api");
+const maps = require("../maps/");
 
 const router = new Router({
   prefix: "/api/v2"
@@ -12,6 +13,7 @@ const router = new Router({
 router.use("/auth", auth.API);
 router.use("/users", users.API);
 router.use("/calendars", calendar.API);
+router.use("/maps", maps.API);
 // router.use(require('../users'));
 router.use(jwt.authenticate, require("../user_role"));
 router.use(jwt.authenticate, require("../groups"));

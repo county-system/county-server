@@ -1,9 +1,10 @@
 const Router = require("koa-router");
 const controller = require("./maps.controller");
+const { requireAuth, grantAccess } = require("../middleware/permController");
 
-const users = new Router();
+const maps = new Router();
 
-users.get("/", controller.getMaps);
+maps.get("/", requireAuth, grantAccess("readAny", "private"), controller.getMaps);
 
 
-module.exports = users.routes();
+module.exports = maps.routes();

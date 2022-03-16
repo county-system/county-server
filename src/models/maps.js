@@ -4,16 +4,13 @@ const knex = require("../../db/db");
 class Maps extends Model {
 
   static get tableName() {
-    return "Maps";
+    return "map";
   }
 
   async $indexForSearch() {
     return null;
   }
 
-  static get relationMappings() {
-    return {};
-  }
 
   static get modifiers() {
     return {};
