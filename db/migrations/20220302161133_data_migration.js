@@ -31,8 +31,8 @@ exports.up = knex =>
       table.text('type');
       table.text('name');
       table.boolean('active').notNullable().defaultTo(false);
-      table.text('lat');
-      table.text('lng');
+      table.float('lat');
+      table.float('lng');
       table.timestamps();
     }).createTable('project', table => {
       table.text('id').primary().notNullable().defaultTo(knex.raw('next_id()'));
